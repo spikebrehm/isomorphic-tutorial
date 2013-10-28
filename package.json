@@ -1,0 +1,23 @@
+{
+  "name": "isomorphic-tutorial",
+  "version": "0.0.0",
+  "description": "Tutorial app to demonstrate isomorphic JavaScript concepts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/spikebrehm/isomorphic-tutorial.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spikebrehm/isomorphic-tutorial/issues"
+  },
+  "dependencies": {
+    "superagent": "~0.15.7",
+    "express": "~3.4.3",
+    "director": "~1.2.0"
+  }
+}
