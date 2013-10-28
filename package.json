@@ -18,6 +18,13 @@
   "dependencies": {
     "superagent": "~0.15.7",
     "express": "~3.4.3",
-    "director": "~1.2.0"
+    "director": "~1.2.0",
+    "moment": "~2.4.0",
+    "handlebars": "~1.0.12"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "browserify": "~2.35.0",
+    "grunt-browserify": "~1.2.9"
   }
 }
