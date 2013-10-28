@@ -1,3 +1,6 @@
+var apiClient = require('./api_client')
+;
+
 module.exports = function(match) {
   match('/', function(callback) {
     console.log('home');
@@ -6,11 +9,23 @@ module.exports = function(match) {
 
   match('/posts', function(callback) {
     console.log('posts');
-    callback(null, 'posts');
+
+    apiClient.get('/posts.json', function(err, res) {
+      if (err) return callback(err);
+
+      var posts = res.body;
+      callback(null, 'posts', {posts: posts});
+    });
   });
 
   match('/posts/:id', function(id, callback) {
     console.log('post: ' + id);
-    callback(null, 'post');
+
+    apiClient.get('/posts/' + id + '.json', function(err, res) {
+      if (err) return callback(err);
+
+      var post = res.body;
+      callback(null, 'post', post);
+    });
   });
 };
