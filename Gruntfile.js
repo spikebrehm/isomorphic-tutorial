@@ -5,10 +5,21 @@ module.exports = function (grunt) {
 
     browserify: {
       main: {
+        options: {
+          debug: true,
+          transform: ['hbsfy'],
+          aliasMappings: [
+            {
+              cwd: 'app/views',
+              src: ['**/*.hbs'],
+              dest: 'app/views'
+            }
+          ],
+        },
         files: {
-          'public/scripts.js': 'app/**/*.js'
-        }
-      }
+          'public/scripts.js': ['app/entry.js', 'app/views/**/*.hbs'],
+        },
+      },
     }
 
   });

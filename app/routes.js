@@ -1,17 +1,16 @@
-var Router = require('director').Router
-  , router = new Router
-;
+module.exports = function(match) {
+  match('/', function(callback) {
+    console.log('home');
+    callback(null, 'index', {name: 'Spike'});
+  });
 
-router.get('/', function() {
-  console.log('home');
-});
+  match('/posts', function(callback) {
+    console.log('posts');
+    callback(null, 'posts');
+  });
 
-router.get('/posts', function() {
-  console.log('posts');
-});
-
-router.get('/posts/:id', function(id) {
-  console.log('post: ' + id);
-});
-
-router.init();
+  match('/posts/:id', function(id, callback) {
+    console.log('post: ' + id);
+    callback(null, 'post');
+  });
+};
