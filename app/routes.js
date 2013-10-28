@@ -4,7 +4,8 @@ var apiClient = require('./api_client')
 module.exports = function(match) {
   match('/', function(callback) {
     console.log('home');
-    callback(null, 'index', {name: 'Spike'});
+
+    callback(null, 'index');
   });
 
   match('/posts', function(callback) {
