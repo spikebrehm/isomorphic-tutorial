@@ -29,7 +29,7 @@ function Router(routesFn) {
       });
     }.bind(this);
   }
-};
+}
 
 /**
  * Capture routes as object that can be passed to Director.
