@@ -7,16 +7,24 @@ var superagent = require('superagent')
   , apiPort = process.env.API_PORT || 3031
 ;
 
-module.exports = {
-  get: function(path, callback) {
-    if (isServer) {
-      // Prepend host and port of the API server to the path.
-      path = 'http://localhost:' + apiPort + path;
-    } else {
-      // Prepend `/api` to relative URL, to proxy to API server.
-      path = '/api' + path;
-    }
+/**
+ * Proxy each method to `superagent`, formatting the URL.
+ */
+['get', 'post', 'put', 'path', 'del'].forEach(function(method) {
+  exports[method] = function(path) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    superagent[method].apply(null, [formatUrl(path)].concat(args));
+  };
+});
 
-    superagent.get(path, callback);
+function formatUrl(path) {
+  var url;
+  if (isServer) {
+    // Prepend host and port of the API server to the path.
+    url = 'http://localhost:' + apiPort + path;
+  } else {
+    // Prepend `/api` to relative URL, to proxy to API server.
+    url = '/api' + path;
   }
-};
+  return url;
+}
