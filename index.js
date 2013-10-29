@@ -1,5 +1,4 @@
 var express = require('express')
-  , httpProxy = require('http-proxy')
   , app = express()
   , port = process.env.PORT || 3030
   , apiPort = process.env.API_PORT || 3031
@@ -14,13 +13,7 @@ app.use(express.static(__dirname + '/public'));
 // On the client, we want to be able to just send API requests to the
 // main web server using a relative URL, so we proxy requests to the
 // API server here.
-var proxy = new httpProxy.RoutingProxy();
-app.use('/api', function(req, res, next) {
-  proxy.proxyRequest(req, res, {
-    host: 'localhost',
-    port: apiPort
-  });
-});
+app.use('/api', api.proxyMiddleware(apiPort));
 
 // Use the router as a middleware.
 app.use(router.middleware);
