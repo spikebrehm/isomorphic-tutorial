@@ -17,7 +17,7 @@ module.exports = function (grunt) {
           ],
         },
         files: {
-          'public/scripts.js': ['app/entry.js', 'app/views/**/*.hbs'],
+          'public/scripts.js': 'app/entry.js',
         },
       },
     }

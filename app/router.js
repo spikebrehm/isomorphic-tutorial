@@ -24,7 +24,7 @@ function Router(routesFn) {
     this.middleware = function(req, res, next) {
       this.directorRouter.dispatch(req, res, function (err) {
         if (err) {
-          res.send(err.status, err.message + err.stack);
+          next(err);
         }
       });
     }.bind(this);
