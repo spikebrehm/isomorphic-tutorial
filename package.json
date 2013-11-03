@@ -24,7 +24,7 @@
     "http-proxy": "~0.10.3",
     "reactify": "~0.4.0",
     "react-tools": "~0.5.1",
-    "node-jsx": "spikebrehm/node-jsx#extension-option"
+    "node-jsx": "petehunt/node-jsx"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
