@@ -22,6 +22,11 @@ function Router(routesFn) {
   // Express middleware.
   if (isServer) {
     this.middleware = function(req, res, next) {
+      // Attach `this.next` to route handler, for better handling of errors.
+      this.directorRouter.attach(function() {
+        this.next = next;
+      });
+
       this.directorRouter.dispatch(req, res, function (err) {
         if (err) {
           next(err);
@@ -66,28 +71,44 @@ Router.prototype.getRouteHandler = function(handler) {
     // `routeContext` has `req` and `res` when on the server (from Director).
     var routeContext = this
       , params = Array.prototype.slice.call(arguments)
+      , handleErr = router.handleErr.bind(routeContext)
     ;
 
-    handler.apply(null, params.concat(function routeHandler(err, viewPath, data) {
-      if (err) return router.handleErr(err);
+    function handleRoute() {
+      handler.apply(null, params.concat(function routeHandler(err, viewPath, data) {
+        if (err) return handleErr(err);
 
-      data = data || {};
+        data = data || {};
 
-      router.renderView(viewPath, data, function(err, html) {
-        if (err) return router.handleErr(err);
+        router.renderView(viewPath, data, function(err, html) {
+          if (err) return handleErr(err);
 
-        if (isServer) {
-          router.handleServerRoute(html, routeContext.req, routeContext.res);
-        } else {
-          router.handleClientRoute(html);
-        }
-      });
-    }));
+          if (isServer) {
+            router.handleServerRoute(html, routeContext.req, routeContext.res);
+          } else {
+            router.handleClientRoute(html);
+          }
+        });
+      }));
+    }
+
+    try {
+      handleRoute();
+    } catch (err) {
+      handleErr(err);
+    }
   };
 };
 
 Router.prototype.handleErr = function(err) {
   console.error(err.message + err.stack);
+
+  // `this.next` is defined on the server.
+  if (this.next) {
+    this.next(err);
+  } else {
+    alert(err.message);
+  }
 };
 
 Router.prototype.renderView = function(viewPath, data, callback) {
