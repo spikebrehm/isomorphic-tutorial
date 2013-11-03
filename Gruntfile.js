@@ -7,11 +7,11 @@ module.exports = function (grunt) {
       main: {
         options: {
           debug: true,
-          transform: ['hbsfy'],
+          transform: ['reactify'],
           aliasMappings: [
             {
               cwd: 'app/views',
-              src: ['**/*.hbs'],
+              src: ['**/*.jsx'],
               dest: 'app/views'
             }
           ],

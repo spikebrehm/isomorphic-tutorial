@@ -1,6 +1,7 @@
 var director = require('director')
   , isServer = typeof window === 'undefined'
-  , Handlebars = isServer ? require('handlebars') : require('hbsfy/runtime')
+  , Handlebars = require('handlebars')
+  , React = require('react-tools').React
   , viewsDir = (isServer ? __dirname : 'app') + '/views'
   , DirectorRouter
   , firstRender = true
@@ -116,10 +117,11 @@ Router.prototype.handleErr = function(err) {
 
 Router.prototype.renderView = function(viewPath, data, callback) {
   try {
-    var template = require(viewsDir + '/' + viewPath)
-      , html = template(data)
+    var Component = require(viewsDir + '/' + viewPath)
     ;
-    callback(null, html);
+    React.renderComponentToString(Component(data), function(html) {
+      callback(null, html);
+    });
   } catch (err) {
     callback(err);
   }

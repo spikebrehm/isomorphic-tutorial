@@ -8,6 +8,9 @@ var express = require('express')
   , api = require('./lib/api')
 ;
 
+// Allow directly requiring '.jsx' files.
+require('node-jsx').install({extension: '.jsx'});
+
 app.use(express.static(__dirname + '/public'));
 
 // On the client, we want to be able to just send API requests to the
