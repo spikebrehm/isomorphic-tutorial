@@ -26,9 +26,68 @@ We use the following modules on both client and server:
 
 On top of a basic [Express](https://github.com/visionmedia/express) app.
 
-## Browserify
+We use [Browserify](http://browserify.org/) and [Grunt](http://gruntjs.com/) to package our server-side CommonJS modules in a way that allows us to use them in the client-side.
 
-The app is tied together with Browserify.
+## Getting it running
+
+### Install Node.js >= 0.8.x
+
+If Node.js versino 0.8.x (preferably 0.10.x) is not already installed on your system, install it so you can run this app.
+
+#### Check if it's installed
+
+The command `which node` will return a path to your installed version of Node.js, if it exists on your system.
+
+    $ which node
+    /usr/local/bin/node
+
+If it is installed, make sure it's at least version 0.8.x, and preferably 0.10.x.
+
+    $ node --version
+    v0.10.21
+
+#### To install
+
+##### Mac
+
+Preferably install using Homebrew:
+
+    $ brew install node
+
+##### Else
+
+Otherwise, go to the [nodejs.org](http://nodejs.org/) and download the binary to install on your system.
+
+### Install `grunt-cli`
+
+This app uses [Grunt](http://gruntjs.com/) to build its assets. To run Grunt, we need to install the `grunt-cli` package globally on your system using NPM.
+
+    $ npm install -g grunt-cli
+
+### Clone this repo onto your machine
+
+    $ cd ~/code
+    $ git clone git@github.com:spikebrehm/isomorphic-tutorial.git
+    $ cd isomorphic-tutorial
+
+### Run `npm install` to install dependenices
+
+	$ npm install
+	npm http GET https://registry.npmjs.org/moment
+	npm http GET https://registry.npmjs.org/superagent
+	npm http GET https://registry.npmjs.org/handlebars
+	npm http GET https://registry.npmjs.org/director
+    ...
+
+### Run the app!
+
+We'll start up our local Node.js web server using Grunt, so it can automatically do useful things for us when we change files like recompile our assets and restart the server.
+
+    $ grunt server
+
+This will start our local web server on port `3030`.
+
+You can view it in your web browser at `http://localhost:3030/`
 
 ## License
 
