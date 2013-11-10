@@ -73,7 +73,6 @@ This app uses [Grunt](http://gruntjs.com/) to build its assets. To run Grunt, we
 ### Run `npm install` to install dependenices
 
 	$ npm install
-	npm http GET https://registry.npmjs.org/moment
 	npm http GET https://registry.npmjs.org/superagent
 	npm http GET https://registry.npmjs.org/handlebars
 	npm http GET https://registry.npmjs.org/director
