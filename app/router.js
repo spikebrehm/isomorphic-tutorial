@@ -6,6 +6,9 @@ var director = require('director')
   , firstRender = true
 ;
 
+// Register Handlebars Helpers
+require('./helpers')(Handlebars).register();
+
 if (isServer) {
   DirectorRouter = director.http.Router;
 } else {
