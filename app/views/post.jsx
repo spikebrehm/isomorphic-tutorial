@@ -8,7 +8,7 @@ module.exports = React.createClass({
     return (
       <div>
         <h1>{this.props.title}</h1>
-        <small>By {this.props.author}</small>
+        <small>Posted by {this.props.author} at {this.props.created_at}</small>
         <p>{this.props.body}</p>
       </div>
     );
