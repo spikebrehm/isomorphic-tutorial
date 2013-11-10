@@ -20,7 +20,7 @@
     "express": "~3.4.3",
     "director": "~1.2.0",
     "handlebars": "~1.0.12",
-    "hbsfy": "~0.1.5",
+    "hbsfy": "~1.0.0",
     "underscore": "~1.5.2",
     "http-proxy": "~0.10.3"
   },

@@ -1,6 +1,6 @@
 var director = require('director')
   , isServer = typeof window === 'undefined'
-  , Handlebars = require('handlebars')
+  , Handlebars = isServer ? require('handlebars') : require('hbsfy/runtime')
   , viewsDir = (isServer ? __dirname : 'app') + '/views'
   , DirectorRouter
   , firstRender = true
