@@ -22,6 +22,18 @@ module.exports = function (grunt) {
       },
     },
 
+    stylus: {
+      main: {
+        options: {
+          paths: ['assets/stylesheets'],
+          'include css': true
+        },
+        files: {
+          'public/styles.css': 'assets/stylesheets/index.styl'
+        }
+      }
+    },
+
     nodemon: {
       main: {}
     },
@@ -30,6 +42,13 @@ module.exports = function (grunt) {
       app: {
         files: 'app/**/*',
         tasks: ['browserify'],
+        options: {
+          interrupt: true
+        }
+      },
+      styles: {
+        files: 'assets/stylesheets/**/*',
+        tasks: ['stylus'],
         options: {
           interrupt: true
         }
@@ -48,11 +67,12 @@ module.exports = function (grunt) {
   });
 
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-stylus');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-concurrent');
 
-  grunt.registerTask('compile', ['browserify']);
+  grunt.registerTask('compile', ['browserify', 'stylus']);
   grunt.registerTask('default', ['compile']);
   grunt.registerTask('server', ['compile', 'concurrent']);
 };

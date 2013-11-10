@@ -16,3 +16,4 @@ node_modules
 
 *.swp
 public/scripts.js
+public/styles.css

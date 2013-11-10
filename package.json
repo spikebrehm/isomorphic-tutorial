@@ -31,6 +31,7 @@
     "grunt-browserify": "~1.2.9",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-nodemon": "~0.1.1",
-    "grunt-concurrent": "~0.4.1"
+    "grunt-concurrent": "~0.4.1",
+    "grunt-contrib-stylus": "~0.10.0"
   }
 }
