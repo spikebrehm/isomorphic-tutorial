@@ -28,6 +28,9 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "browserify": "~2.35.0",
-    "grunt-browserify": "~1.2.9"
+    "grunt-browserify": "~1.2.9",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-nodemon": "~0.1.1",
+    "grunt-concurrent": "~0.4.1"
   }
 }
