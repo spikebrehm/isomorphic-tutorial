@@ -88,6 +88,25 @@ This will start our local web server on port `3030`.
 
 You can view it in your web browser at `http://localhost:3030/`
 
+## Adding features
+
+Now that you've got it running, you can start adding some features to get to know the problem space better.
+
+We've got some branches you can check out that show how to add certain features.
+
+### Adding the Moment library for date formatting
+
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/moment)
+
+This branch adds the [Moment](http://momentjs.com/) date formatting library for use on the `/posts/:id` page.
+
+### Swapping out Handlebars.js for React.js
+
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/react)
+
+[React.js](https://facebook.github.io/react/) is an awesome UI library from Facebook. This branch shows
+how to use it instead of Handlebars.js for rendering views on client and server.
+
 ## License
 
 MIT
