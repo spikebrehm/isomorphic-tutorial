@@ -31,8 +31,8 @@ function Router(routesFn) {
       });
 
       this.directorRouter.dispatch(req, res, function (err) {
-        if (err) {
-          next(err);
+        if (err && err.status === 404) {
+          next();
         }
       });
     }.bind(this);
