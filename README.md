@@ -10,7 +10,7 @@ I'll be using this in some upcoming workshops:
 
 ## Overview
 
-Here we've built the minimum-viable example of an isomorphic JavaScript app: an app that can run on both client and server. Check out Charlie Robbins' [great blog post](http://blog.nodejitsu.com/scaling-isomorphic-javascript-code) on isomorphic JavaScript for some background.
+Here we've built the minimum-viable example of an isomorphic JavaScript app: an app that can run on both client and server. Check out my [blog post](http://venturebeat.com/2013/11/08/the-future-of-web-apps-is-ready-isomorphic-javascript/) on isomorphic JavaScript for some background.
 
 This is a simple Express "blog" app that lists blog posts. Each page is fully rendered on the server, however upon subsequent navigation, we use the HTML5 History API, aka `pushState`, to fetch the data for that page from the API and render the HTML client-side using Handlebars.
 
