@@ -11,7 +11,7 @@ var express = require('express')
 app.use(express.static(__dirname + '/public'));
 
 // Mount the routes defined in `./app/routes` on our server.
-app.use(router.middleware);
+app.use(router.middleware());
 
 // On the client, we want to be able to just send API requests to the
 // main web server using a relative URL, so we proxy requests to the

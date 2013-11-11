@@ -2,18 +2,12 @@ var director = require('director')
   , isServer = typeof window === 'undefined'
   , Handlebars = isServer ? require('handlebars') : require('hbsfy/runtime')
   , viewsDir = (isServer ? __dirname : 'app') + '/views'
-  , DirectorRouter
+  , DirectorRouter = isServer ? director.http.Router : director.Router
   , firstRender = true
 ;
 
 // Register Handlebars Helpers
 require('./helpers')(Handlebars).register();
-
-if (isServer) {
-  DirectorRouter = director.http.Router;
-} else {
-  DirectorRouter = director.Router;
-}
 
 module.exports = Router;
 
@@ -21,22 +15,6 @@ function Router(routesFn) {
   if (routesFn == null) throw new Error("Must provide routes.");
 
   this.directorRouter = new DirectorRouter(this.parseRoutes(routesFn));
-
-  // Express middleware.
-  if (isServer) {
-    this.middleware = function(req, res, next) {
-      // Attach `this.next` to route handler, for better handling of errors.
-      this.directorRouter.attach(function() {
-        this.next = next;
-      });
-
-      this.directorRouter.dispatch(req, res, function (err) {
-        if (err && err.status === 404) {
-          next();
-        }
-      });
-    }.bind(this);
-  }
 }
 
 /**
@@ -146,17 +124,38 @@ Router.prototype.handleServerRoute = function(html, req, res) {
   });
 };
 
-Router.prototype.initPushState = function() {
-  this.directorRouter.configure({
-    html5history: true
-  });
+/*
+ * Express middleware function, for mounting routes onto an Express app.
+ */
+Router.prototype.middleware = function() {
+  var directorRouter = this.directorRouter;
+
+  return function middleware(req, res, next) {
+    // Attach `this.next` to route handler, for better handling of errors.
+    directorRouter.attach(function() {
+      this.next = next;
+    });
+
+    // Dispatch the request to the Director router.
+    directorRouter.dispatch(req, res, function (err) {
+      // When a 404, just forward on to next Express middleware.
+      if (err && err.status === 404) {
+        next();
+      }
+    });
+  };
 };
 
 /**
  * Client-side handler to start router.
  */
 Router.prototype.start = function() {
-  this.initPushState();
+  /**
+   * Tell Director to use HTML5 History API (pushState).
+   */
+  this.directorRouter.configure({
+    html5history: true
+  });
 
   /**
    * Intercept any links that don't have 'data-pass-thru' and route using
@@ -174,5 +173,8 @@ Router.prototype.start = function() {
     }
   }.bind(this), false);
 
+  /**
+   * Kick off routing.
+   */
   this.directorRouter.init();
 };
