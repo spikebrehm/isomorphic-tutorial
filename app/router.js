@@ -60,6 +60,7 @@ Router.prototype.getRouteHandler = function(handler) {
         if (err) return handleErr(err);
 
         data = data || {};
+        data.renderer = isServer ? 'server' : 'client';
 
         router.renderView(viewPath, data, function(err, html) {
           if (err) return handleErr(err);
