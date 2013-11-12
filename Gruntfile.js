@@ -35,7 +35,12 @@ module.exports = function (grunt) {
     },
 
     nodemon: {
-      main: {}
+      main: {},
+      debug: {
+        options: {
+          nodeArgs: ['--debug']
+        }
+      }
     },
 
     watch: {
@@ -61,9 +66,19 @@ module.exports = function (grunt) {
         options: {
           logConcurrentOutput: true
         }
-      }
-    }
+      },
 
+      debug: {
+        tasks: ['nodemon:debug', 'watch', 'node-inspector'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
+
+    'node-inspector': {
+      main: {}
+    }
   });
 
   grunt.loadNpmTasks('grunt-browserify');
@@ -71,8 +86,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-concurrent');
+  grunt.loadNpmTasks('grunt-node-inspector');
 
   grunt.registerTask('compile', ['browserify', 'stylus']);
   grunt.registerTask('default', ['compile']);
   grunt.registerTask('server', ['compile', 'concurrent']);
+  grunt.registerTask('server:debug', ['compile', 'concurrent:debug']);
 };
