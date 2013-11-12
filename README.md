@@ -107,6 +107,10 @@ This branch adds the [Moment](http://momentjs.com/) date formatting library for 
 [React.js](https://facebook.github.io/react/) is an awesome UI library from Facebook. This branch shows
 how to use it instead of Handlebars.js for rendering views on client and server.
 
+### Create a route for adding posts
+
+Create, i.e. `/posts/new`, which POSTs to the `/api/posts.json` endpoint. 
+
 ## License
 
 MIT
