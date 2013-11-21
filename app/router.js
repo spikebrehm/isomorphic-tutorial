@@ -95,7 +95,7 @@ Router.prototype.handleErr = function(err) {
 
 Router.prototype.renderView = function(viewPath, data, callback) {
   try {
-    var template = require(viewsDir + '/' + viewPath)
+    var template = require(viewsDir + '/' + viewPath + '.hbs')
       , html = template(data)
     ;
     callback(null, html);
@@ -104,10 +104,10 @@ Router.prototype.renderView = function(viewPath, data, callback) {
   }
 };
 
-Router.prototype.wrapWithLayout = function(html, callback) {
+Router.prototype.wrapWithLayout = function(locals, callback) {
   try {
     var layout = require(viewsDir + '/layout')
-      , layoutHtml = layout({body: html})
+      , layoutHtml = layout(locals)
     ;
     callback(null, layoutHtml);
   } catch (err) {
@@ -120,7 +120,11 @@ Router.prototype.handleClientRoute = function(html) {
 };
 
 Router.prototype.handleServerRoute = function(html, req, res) {
-  this.wrapWithLayout(html, function(err, layoutHtml) {
+  var locals = {
+    body: html,
+  };
+
+  this.wrapWithLayout(locals, function(err, layoutHtml) {
     res.send(layoutHtml);
   });
 };
@@ -178,4 +182,11 @@ Router.prototype.start = function() {
    * Kick off routing.
    */
   this.directorRouter.init();
+};
+
+/**
+ * Client-side method for redirecting.
+ */
+Router.prototype.setRoute = function(route) {
+  this.directorRouter.setRoute(route);
 };

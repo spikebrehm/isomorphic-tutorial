@@ -7,4 +7,6 @@ var Router = require('./router')
   , router = new Router(routes)
 ;
 
+window.router = router;
+
 router.start();

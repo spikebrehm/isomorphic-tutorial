@@ -11,10 +11,18 @@ module.exports = function (grunt) {
           aliasMappings: [
             {
               cwd: 'app/views',
-              src: ['**/*.hbs'],
-              dest: 'app/views'
+              src: ['**/*'],
+              dest: 'app/views',
+              rename: function(cwd, src) {
+                // Little hack to ensure that file extension is preserved.
+                // This allows us to have '.hbs' and '.js' files in same
+                // directory with same basename.
+                var ext = src.split('.').pop();
+                return cwd + '/' + src + '.' + ext;
+              }
             }
           ],
+          alias: ['jquery-browserify:jquery'],
         },
         files: {
           'public/scripts.js': 'app/entry.js',

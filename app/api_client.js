@@ -13,7 +13,7 @@ var superagent = require('superagent')
 ['get', 'post', 'put', 'path', 'del'].forEach(function(method) {
   exports[method] = function(path) {
     var args = Array.prototype.slice.call(arguments, 1);
-    superagent[method].apply(null, [formatUrl(path)].concat(args));
+    return superagent[method].apply(null, [formatUrl(path)].concat(args));
   };
 });
 
