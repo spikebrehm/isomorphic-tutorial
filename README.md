@@ -107,9 +107,16 @@ This branch adds the [Moment](http://momentjs.com/) date formatting library for 
 [React.js](https://facebook.github.io/react/) is an awesome UI library from Facebook. This branch shows
 how to use it instead of Handlebars.js for rendering views on client and server.
 
+### Use Showdown library to add Markdown to posts
+
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/showdown)
+
+This branch adds the [Showdown](https://github.com/coreyti/showdown) library to allow
+formatting of blog post bodies in Markdown, in just a few lines of code.
+
 ### Create a route for adding posts
 
-Create, i.e. `/posts/new`, which POSTs to the `/api/posts.json` endpoint. 
+Create, i.e. `/posts/new`, which POSTs to the `/api/posts.json` endpoint.
 
 ## License
 
