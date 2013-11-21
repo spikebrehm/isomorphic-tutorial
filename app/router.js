@@ -46,6 +46,7 @@ Router.prototype.getRouteHandler = function(handler) {
      */
     if (!isServer && firstRender) {
       firstRender = false;
+      router.initClientView(router.bootstrappedData.viewPath);
       return;
     }
 
@@ -117,11 +118,26 @@ Router.prototype.wrapWithLayout = function(locals, callback) {
 
 Router.prototype.handleClientRoute = function(viewPath, html) {
   document.getElementById('view-container').innerHTML = html;
+
+  this.initClientView(viewPath);
+};
+
+Router.prototype.initClientView = function(viewPath) {
+  // Try to find an associated client-side JS file.
+  try {
+    var View = require(viewsDir + '/' + viewPath + '.js');
+  } catch (e) {}
+
+  if (View) {
+    this.currentView = new View({router: this});
+  }
 };
 
 Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
   // Any objects we want to serialize to the client on pageload.
   var bootstrappedData = {
+    // Send `viewPath` to client for bootstrapping.
+    viewPath: viewPath,
   };
 
   var locals = {
