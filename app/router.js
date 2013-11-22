@@ -66,9 +66,9 @@ Router.prototype.getRouteHandler = function(handler) {
           if (err) return handleErr(err);
 
           if (isServer) {
-            router.handleServerRoute(html, routeContext.req, routeContext.res);
+            router.handleServerRoute(viewPath, html, routeContext.req, routeContext.res);
           } else {
-            router.handleClientRoute(html);
+            router.handleClientRoute(viewPath, html);
           }
         });
       }));
@@ -115,11 +115,11 @@ Router.prototype.wrapWithLayout = function(locals, callback) {
   }
 };
 
-Router.prototype.handleClientRoute = function(html) {
+Router.prototype.handleClientRoute = function(viewPath, html) {
   document.getElementById('view-container').innerHTML = html;
 };
 
-Router.prototype.handleServerRoute = function(html, req, res) {
+Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
   var locals = {
     body: html,
   };
