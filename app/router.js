@@ -120,8 +120,13 @@ Router.prototype.handleClientRoute = function(viewPath, html) {
 };
 
 Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
+  // Any objects we want to serialize to the client on pageload.
+  var bootstrappedData = {
+  };
+
   var locals = {
     body: html,
+    bootstrappedData: JSON.stringify(bootstrappedData),
   };
 
   this.wrapWithLayout(locals, function(err, layoutHtml) {
@@ -154,7 +159,9 @@ Router.prototype.middleware = function() {
 /**
  * Client-side handler to start router.
  */
-Router.prototype.start = function() {
+Router.prototype.start = function(bootstrappedData) {
+  this.bootstrappedData = bootstrappedData;
+
   /**
    * Tell Director to use HTML5 History API (pushState).
    */
