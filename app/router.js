@@ -81,13 +81,13 @@ Router.prototype.getRouteHandler = function(handler) {
 
         data = data || {};
 
-        router.renderView(viewPath, data, function(err, html) {
+        router.renderView(viewPath, data, function(err, component) {
           if (err) return handleErr(err);
 
           if (isServer) {
-            router.handleServerRoute(html, routeContext.req, routeContext.res);
+            router.handleServerRoute(component, routeContext.req, routeContext.res);
           } else {
-            router.handleClientRoute(html);
+            router.handleClientRoute(component);
           }
         });
       }));
@@ -116,9 +116,7 @@ Router.prototype.renderView = function(viewPath, data, callback) {
   try {
     var Component = require(viewsDir + '/' + viewPath)
     ;
-    React.renderComponentToString(Component(data), function(html) {
-      callback(null, html);
-    });
+    callback(null, Component(data));
   } catch (err) {
     callback(err);
   }
@@ -135,14 +133,16 @@ Router.prototype.wrapWithLayout = function(html, callback) {
   }
 };
 
-Router.prototype.handleClientRoute = function(html) {
-  document.getElementById('view-container').innerHTML = html;
+Router.prototype.handleClientRoute = function(component) {
+  React.renderComponent(component, document.getElementById('view-container'));
 };
 
-Router.prototype.handleServerRoute = function(html, req, res) {
-  this.wrapWithLayout(html, function(err, layoutHtml) {
-    res.send(layoutHtml);
-  });
+Router.prototype.handleServerRoute = function(component, req, res) {
+  React.renderComponentToString(component, function(html){
+    this.wrapWithLayout(html, function(err, layoutHtml) {
+      res.send(layoutHtml);
+    });
+  }.bind(this));
 };
 
 Router.prototype.initPushState = function() {
