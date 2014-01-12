@@ -41,11 +41,13 @@ Router.prototype.getRouteHandler = function(handler) {
   var router = this;
 
   return function() {
-    /** If it's the first render on the client, just return; we don't want to
+    /**
+     * If it's the first render on the client, just return; we don't want to
      * replace the page's HTML.
      */
     if (!isServer && firstRender) {
       firstRender = false;
+      router.initClientView(router.bootstrappedData.viewPath);
       return;
     }
 
@@ -117,11 +119,27 @@ Router.prototype.wrapWithLayout = function(locals, callback) {
 
 Router.prototype.handleClientRoute = function(viewPath, html) {
   document.getElementById('view-container').innerHTML = html;
+
+  this.initClientView(viewPath);
+};
+
+Router.prototype.initClientView = function(viewPath) {
+  try {
+    var View = require(viewsDir + '/' + viewPath + '.js')
+    ;
+  } catch (err) {}
+
+  if (View) {
+    var view = new View({
+      el: '#view-container'
+    });
+  }
 };
 
 Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
   // Any objects we want to serialize to the client on pageload.
   var bootstrappedData = {
+    viewPath: viewPath
   };
 
   var locals = {

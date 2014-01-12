@@ -19,6 +19,12 @@ module.exports = function(match) {
     });
   });
 
+  match('/posts/new', function(callback) {
+    console.log('new post, yo');
+
+    callback(null, 'posts_new');
+  });
+
   match('/posts/:id', function(id, callback) {
     console.log('post: ' + id);
 

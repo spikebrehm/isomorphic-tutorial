@@ -23,7 +23,9 @@
     "hbsfy": "~1.0.0",
     "underscore": "~1.5.2",
     "http-proxy": "~0.10.3",
-    "jquery-browserify": "~1.8.1"
+    "jquery-browserify": "~1.8.1",
+    "moment": "~2.5.0",
+    "backbone": "~1.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

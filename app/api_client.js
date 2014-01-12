@@ -10,7 +10,7 @@ var superagent = require('superagent')
 /**
  * Proxy each method to `superagent`, formatting the URL.
  */
-['get', 'post', 'put', 'path', 'del'].forEach(function(method) {
+['get', 'post', 'put', 'patch', 'del'].forEach(function(method) {
   exports[method] = function(path) {
     var args = Array.prototype.slice.call(arguments, 1);
     return superagent[method].apply(null, [formatUrl(path)].concat(args));
@@ -24,7 +24,11 @@ function formatUrl(path) {
     url = 'http://localhost:' + apiPort + path;
   } else {
     // Prepend `/api` to relative URL, to proxy to API server.
-    url = '/api' + path;
+    if (path.indexOf('/api/') !== 0) {
+      url = '/api' + path;
+    } else {
+      url = path;
+    }
   }
   return url;
 }
