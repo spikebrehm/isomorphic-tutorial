@@ -1,10 +1,17 @@
 var director = require('director')
   , isServer = typeof window === 'undefined'
   , Handlebars = isServer ? require('handlebars') : require('hbsfy/runtime')
+  , Backbone = require('backbone')
+  , jQuery = isServer ? null : require('jquery')
   , viewsDir = (isServer ? __dirname : 'app') + '/views'
   , DirectorRouter = isServer ? director.http.Router : director.Router
   , firstRender = true
 ;
+
+if (!isServer) {
+  window.$ = jQuery;
+  Backbone.$ = jQuery;
+}
 
 // Register Handlebars Helpers
 require('./helpers')(Handlebars).register();
@@ -98,6 +105,9 @@ Router.prototype.renderView = function(viewPath, data, callback) {
     var template = require(viewsDir + '/' + viewPath + '.hbs')
       , html = template(data)
     ;
+
+    html = '<div id="view-container-inner">' + html + '</div>';
+
     callback(null, html);
   } catch (err) {
     callback(err);
@@ -117,11 +127,33 @@ Router.prototype.wrapWithLayout = function(locals, callback) {
 
 Router.prototype.handleClientRoute = function(viewPath, html) {
   document.getElementById('view-container').innerHTML = html;
+
+  this.renderClientSideView(viewPath);
+};
+
+Router.prototype.renderClientSideView = function(viewPath) {
+  var View = this.getClientSideView(viewPath);
+  if (View) {
+    this.currentView = new View({
+      el: '#view-container-inner'
+    });
+  }
+};
+
+Router.prototype.getClientSideView = function(viewPath) {
+  var View;
+  try {
+    View = require(viewsDir + '/' + viewPath + '.js');
+  } catch (err) {
+    console.debug('View "' + viewPath + '" not found');
+  }
+  return View;
 };
 
 Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
   // Any objects we want to serialize to the client on pageload.
   var bootstrappedData = {
+    viewPath: viewPath
   };
 
   var locals = {
@@ -189,6 +221,8 @@ Router.prototype.start = function(bootstrappedData) {
    * Kick off routing.
    */
   this.directorRouter.init();
+
+  this.renderClientSideView(this.bootstrappedData.viewPath);
 };
 
 /**

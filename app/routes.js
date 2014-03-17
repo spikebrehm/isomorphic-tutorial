@@ -5,18 +5,23 @@ module.exports = function(match) {
   match('/', function(callback) {
     console.log('index');
 
-    callback(null, 'index');
+    callback(null, 'index', {});
   });
 
   match('/posts', function(callback) {
     console.log('posts');
 
-    apiClient.get('/posts.json', function(err, res) {
+    apiClient.get('/posts', function(err, res) {
       if (err) return callback(err);
 
       var posts = res.body;
       callback(null, 'posts', {posts: posts});
     });
+  });
+
+  match('/posts/new', function(callback) {
+    console.log('posts new');
+    callback(null, 'posts_new');
   });
 
   match('/posts/:id', function(id, callback) {

@@ -10,7 +10,7 @@ var superagent = require('superagent')
 /**
  * Proxy each method to `superagent`, formatting the URL.
  */
-['get', 'post', 'put', 'path', 'del'].forEach(function(method) {
+['get', 'post', 'put', 'patch', 'del'].forEach(function(method) {
   exports[method] = function(path) {
     var args = Array.prototype.slice.call(arguments, 1);
     return superagent[method].apply(null, [formatUrl(path)].concat(args));
