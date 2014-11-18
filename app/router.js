@@ -53,10 +53,14 @@ Router.prototype.getRouteHandler = function(handler) {
     var routeContext = this
       , params = Array.prototype.slice.call(arguments)
       , handleErr = router.handleErr.bind(routeContext)
+      , handlerContext = {
+          req: this.req,
+          res: this.res,
+        }
     ;
 
     function handleRoute() {
-      handler.apply(null, params.concat(function routeHandler(err, viewPath, data) {
+      handler.apply(handlerContext, params.concat(function routeHandler(err, viewPath, data) {
         if (err) return handleErr(err);
 
         data = data || {};
