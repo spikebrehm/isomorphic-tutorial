@@ -11,7 +11,7 @@ module.exports = function (grunt) {
           aliasMappings: [
             {
               cwd: 'app/views',
-              src: ['**/*'],
+              src: ['**/*.hbs', '**/*.js'],
               dest: 'app/views',
               rename: function(cwd, src) {
                 // Little hack to ensure that file extension is preserved.
