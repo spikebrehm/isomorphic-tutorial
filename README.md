@@ -32,7 +32,7 @@ We use [Browserify](http://browserify.org/) and [Grunt](http://gruntjs.com/) to 
 
 ### Install Node.js >= 0.8.x
 
-If Node.js versino 0.8.x (preferably 0.10.x) is not already installed on your system, install it so you can run this app.
+If Node.js version 0.8.x (preferably 0.10.x) is not already installed on your system, install it so you can run this app.
 
 #### Check if it's installed
 
