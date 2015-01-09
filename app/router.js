@@ -1,6 +1,5 @@
 var director = require('director')
   , isServer = typeof window === 'undefined'
-  , Handlebars = require('handlebars')
   , React = require('react-tools').React
   , viewsDir = (isServer ? __dirname : 'app') + '/views'
   , DirectorRouter
