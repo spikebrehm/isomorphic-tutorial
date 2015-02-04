@@ -1,11 +1,10 @@
-var apiClient = require('./api_client')
-;
+var apiClient = require('./api_client');
 
 module.exports = function(match) {
   match('/', function(callback) {
     console.log('index');
 
-    callback(null, 'index');
+    callback(null, 'Index');
   });
 
   match('/posts', function(callback) {
@@ -15,7 +14,7 @@ module.exports = function(match) {
       if (err) return callback(err);
 
       var posts = res.body;
-      callback(null, 'posts', {posts: posts});
+      callback(null, 'Posts', {posts: posts});
     });
   });
 
@@ -26,7 +25,7 @@ module.exports = function(match) {
       if (err) return callback(err);
 
       var post = res.body;
-      callback(null, 'post', post);
+      callback(null, 'Post', post);
     });
   });
 };
