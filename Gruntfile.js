@@ -89,12 +89,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-stylus');
-  grunt.loadNpmTasks('grunt-nodemon');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-concurrent');
-  grunt.loadNpmTasks('grunt-node-inspector');
+  require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('compile', ['browserify', 'stylus']);
   grunt.registerTask('default', ['compile']);
