@@ -23,7 +23,6 @@
     "director": "^1.2.7",
     "express": "^4.11.2",
     "handlebars": "^2.0.0",
-    "hbsfy": "^2.2.1",
     "http-proxy": "~0.10.3",
     "jquery-browserify": "~1.8.1",
     "node-jsx": "^0.12.4",
