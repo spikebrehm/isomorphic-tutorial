@@ -3,7 +3,7 @@ var apiClient = require('./api_client')
 
 module.exports = function(match) {
   match('/', function(callback) {
-    console.log('home');
+    console.log('index');
 
     callback(null, 'index');
   });

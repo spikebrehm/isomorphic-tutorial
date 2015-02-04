@@ -2,9 +2,10 @@
  * Entry point for client-side.
  */
 
-var Router = require('./router')
-  , routes = require('./routes')
-  , router = new Router(routes)
-;
+var Router = require('./router');
+var routes = require('./routes');
+var router = new Router(routes);
 
-router.start();
+window.router = router;
+
+router.start(window.bootstrappedData);

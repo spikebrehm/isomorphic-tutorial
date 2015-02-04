@@ -15,5 +15,6 @@ npm-debug.log
 node_modules
 
 *.swp
+*.swo
 public/scripts.js
 public/styles.css

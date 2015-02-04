@@ -1,16 +1,13 @@
-/**
- * @jsx React.DOM
- */
-var React = require('react-tools').React;
+var React = require('react');
 
-module.exports = React.createClass({
+var Posts = React.createClass({
   render: function() {
     return (
       <div>
         <h1>Posts</h1>
         <ul>
-        {this.props.posts.map(function(post) {
-          return <li><a href={'/posts/' + post.id}>{post.title}</a></li>;
+        {this.props.posts.map(function(post, index) {
+          return <li key={index}><a href={'/posts/' + post.id}>{post.title}</a></li>;
         })}
         </ul>
       </div>
@@ -18,4 +15,4 @@ module.exports = React.createClass({
   }
 });
 
-
+module.exports = Posts;

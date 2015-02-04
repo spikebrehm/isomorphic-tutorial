@@ -12,9 +12,17 @@ module.exports = function (grunt) {
             {
               cwd: 'app/views',
               src: ['**/*.jsx'],
-              dest: 'app/views'
+              dest: 'app/views',
+              rename: function(cwd, src) {
+                // Little hack to ensure that file extension is preserved.
+                // This allows us to have '.hbs' and '.js' files in same
+                // directory with same basename.
+                var ext = src.split('.').pop();
+                return cwd + '/' + src + '.' + ext;
+              }
             }
           ],
+          alias: ['jquery-browserify:jquery'],
         },
         files: {
           'public/scripts.js': 'app/entry.js',
@@ -35,7 +43,12 @@ module.exports = function (grunt) {
     },
 
     nodemon: {
-      main: {}
+      main: {},
+      debug: {
+        options: {
+          nodeArgs: ['--debug']
+        }
+      }
     },
 
     watch: {
@@ -61,18 +74,25 @@ module.exports = function (grunt) {
         options: {
           logConcurrentOutput: true
         }
-      }
-    }
+      },
 
+      debug: {
+        tasks: ['nodemon:debug', 'watch', 'node-inspector'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
+
+    'node-inspector': {
+      main: {}
+    }
   });
 
-  grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-stylus');
-  grunt.loadNpmTasks('grunt-nodemon');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-concurrent');
+  require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('compile', ['browserify', 'stylus']);
   grunt.registerTask('default', ['compile']);
   grunt.registerTask('server', ['compile', 'concurrent']);
+  grunt.registerTask('server:debug', ['compile', 'concurrent:debug']);
 };

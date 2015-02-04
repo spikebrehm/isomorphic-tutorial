@@ -10,7 +10,7 @@ I'll be using this in some upcoming workshops:
 
 ## Overview
 
-Here we've built the minimum-viable example of an isomorphic JavaScript app: an app that can run on both client and server. Check out Charlie Robbins' [great blog post](http://blog.nodejitsu.com/scaling-isomorphic-javascript-code) on isomorphic JavaScript for some background.
+Here we've built the minimum-viable example of an isomorphic JavaScript app: an app that can run on both client and server. Check out my [blog post](http://venturebeat.com/2013/11/08/the-future-of-web-apps-is-ready-isomorphic-javascript/) on isomorphic JavaScript for some background.
 
 This is a simple Express "blog" app that lists blog posts. Each page is fully rendered on the server, however upon subsequent navigation, we use the HTML5 History API, aka `pushState`, to fetch the data for that page from the API and render the HTML client-side using Handlebars.
 
@@ -87,6 +87,38 @@ We'll start up our local Node.js web server using Grunt, so it can automatically
 This will start our local web server on port `3030`.
 
 You can view it in your web browser at `http://localhost:3030/`
+
+## Adding features
+
+Now that you've got it running, you can start adding some features to get to know the problem space better.
+
+We've got some branches you can check out that show how to add certain features.
+
+### Adding the Moment library for date formatting
+
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/moment)
+
+This branch adds the [Moment](http://momentjs.com/) date formatting library for use on the `/posts/:id` page.
+
+### Swapping out Handlebars.js for React.js
+
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/react)
+
+[React.js](https://facebook.github.io/react/) is an awesome UI library from Facebook. This branch shows
+how to use it instead of Handlebars.js for rendering views on client and server.
+
+### Use Showdown library to add Markdown to posts
+
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/showdown)
+
+This branch adds the [Showdown](https://github.com/coreyti/showdown) library to allow
+formatting of blog post bodies in Markdown, in just a few lines of code.
+
+### Create a route for adding posts
+
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/posts-create)
+
+Create a page with a form at `/posts/new`, which POSTs to the `/api/posts.json` endpoint.
 
 ## License
 

@@ -1,17 +1,13 @@
-var director = require('director')
-  , isServer = typeof window === 'undefined'
-  , Handlebars = require('handlebars')
-  , React = require('react-tools').React
-  , viewsDir = (isServer ? __dirname : 'app') + '/views'
-  , DirectorRouter
-  , firstRender = true
-;
+var director = require('director');
+var isServer = typeof window === 'undefined';
+var Handlebars = isServer ? require('handlebars') : null;
+var React = require('react');
+var viewsDir = (isServer ? __dirname : 'app') + '/views';
+var DirectorRouter = isServer ? director.http.Router : director.Router;
+var firstRender = true;
 
-if (isServer) {
-  DirectorRouter = director.http.Router;
-} else {
-  DirectorRouter = director.Router;
-}
+// Expose `window.React` for dev tools.
+if (!isServer) window.React = React;
 
 module.exports = Router;
 
@@ -19,22 +15,6 @@ function Router(routesFn) {
   if (routesFn == null) throw new Error("Must provide routes.");
 
   this.directorRouter = new DirectorRouter(this.parseRoutes(routesFn));
-
-  // Express middleware.
-  if (isServer) {
-    this.middleware = function(req, res, next) {
-      // Attach `this.next` to route handler, for better handling of errors.
-      this.directorRouter.attach(function() {
-        this.next = next;
-      });
-
-      this.directorRouter.dispatch(req, res, function (err) {
-        if (err) {
-          next(err);
-        }
-      });
-    }.bind(this);
-  }
 }
 
 /**
@@ -70,24 +50,28 @@ Router.prototype.getRouteHandler = function(handler) {
     }
 
     // `routeContext` has `req` and `res` when on the server (from Director).
-    var routeContext = this
-      , params = Array.prototype.slice.call(arguments)
-      , handleErr = router.handleErr.bind(routeContext)
-    ;
+    var routeContext = this;
+    var params = Array.prototype.slice.call(arguments);
+    var handleErr = router.handleErr.bind(routeContext);
+    var handlerContext = {
+      req: this.req,
+      res: this.res,
+    };
 
     function handleRoute() {
-      handler.apply(null, params.concat(function routeHandler(err, viewPath, data) {
+      handler.apply(handlerContext, params.concat(function routeHandler(err, viewPath, data) {
         if (err) return handleErr(err);
 
         data = data || {};
+        data.renderer = isServer ? 'server' : 'client';
 
         router.renderView(viewPath, data, function(err, html) {
           if (err) return handleErr(err);
 
           if (isServer) {
-            router.handleServerRoute(html, routeContext.req, routeContext.res);
+            router.handleServerRoute(viewPath, html, routeContext.req, routeContext.res);
           } else {
-            router.handleClientRoute(html);
+            router.handleClientRoute(viewPath, html);
           }
         });
       }));
@@ -114,57 +98,85 @@ Router.prototype.handleErr = function(err) {
 
 Router.prototype.renderView = function(viewPath, data, callback) {
   try {
-    var Component = require(viewsDir + '/' + viewPath)
-    ;
-    React.renderComponentToString(Component(data), function(html) {
-      callback(null, html);
-    });
+    var Component = React.createFactory(require(viewsDir + '/' + viewPath + '.jsx'));
+    var html = React.renderToString(Component(data));
+    callback(null, html);
   } catch (err) {
     callback(err);
   }
 };
 
-Router.prototype.wrapWithLayout = function(html, callback) {
+Router.prototype.wrapWithLayout = function(locals, callback) {
   try {
-    var layout = require(viewsDir + '/layout')
-      , layoutHtml = layout({body: html})
-    ;
+    var layout = require(viewsDir + '/layout');
+    var layoutHtml = layout(locals);
     callback(null, layoutHtml);
   } catch (err) {
     callback(err);
   }
 };
 
-Router.prototype.handleClientRoute = function(html) {
+Router.prototype.handleClientRoute = function(viewPath, html) {
   document.getElementById('view-container').innerHTML = html;
 };
 
-Router.prototype.handleServerRoute = function(html, req, res) {
-  this.wrapWithLayout(html, function(err, layoutHtml) {
+Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
+  // Any objects we want to serialize to the client on pageload.
+  var bootstrappedData = {};
+
+  var locals = {
+    body: html,
+    bootstrappedData: JSON.stringify(bootstrappedData),
+  };
+
+  this.wrapWithLayout(locals, function(err, layoutHtml) {
+    if (err) return res.status(500).type('text').send(err.message);
     res.send(layoutHtml);
   });
 };
 
-Router.prototype.initPushState = function() {
-  this.directorRouter.configure({
-    html5history: true
-  });
+/*
+ * Express middleware function, for mounting routes onto an Express app.
+ */
+Router.prototype.middleware = function() {
+  var directorRouter = this.directorRouter;
+
+  return function middleware(req, res, next) {
+    // Attach `this.next` to route handler, for better handling of errors.
+    directorRouter.attach(function() {
+      this.next = next;
+    });
+
+    // Dispatch the request to the Director router.
+    directorRouter.dispatch(req, res, function (err) {
+      // When a 404, just forward on to next Express middleware.
+      if (err && err.status === 404) {
+        next();
+      }
+    });
+  };
 };
 
 /**
  * Client-side handler to start router.
  */
-Router.prototype.start = function() {
-  this.initPushState();
+Router.prototype.start = function(bootstrappedData) {
+  this.bootstrappedData = bootstrappedData;
+
+  /**
+   * Tell Director to use HTML5 History API (pushState).
+   */
+  this.directorRouter.configure({
+    html5history: true
+  });
 
   /**
    * Intercept any links that don't have 'data-pass-thru' and route using
    * pushState.
    */
   document.addEventListener('click', function(e) {
-    var el = e.target
-      , dataset = el && el.dataset
-    ;
+    var el = e.target;
+    var dataset = el && el.dataset;
     if (el && el.nodeName === 'A' && (
         dataset.passThru == null || dataset.passThru === 'false'
       )) {
@@ -173,5 +185,15 @@ Router.prototype.start = function() {
     }
   }.bind(this), false);
 
+  /**
+   * Kick off routing.
+   */
   this.directorRouter.init();
+};
+
+/**
+ * Client-side method for redirecting.
+ */
+Router.prototype.setRoute = function(route) {
+  this.directorRouter.setRoute(route);
 };

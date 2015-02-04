@@ -2,10 +2,9 @@
  * Small wrapper around `superagent` module to make it easier to consume
  * the API the same way on client & server.
  */
-var superagent = require('superagent')
-  , isServer = typeof window === 'undefined'
-  , apiPort = process.env.API_PORT || 3031
-;
+var superagent = require('superagent');
+var isServer = typeof window === 'undefined';
+var apiPort = process.env.API_PORT || 3031;
 
 /**
  * Proxy each method to `superagent`, formatting the URL.
@@ -13,7 +12,7 @@ var superagent = require('superagent')
 ['get', 'post', 'put', 'path', 'del'].forEach(function(method) {
   exports[method] = function(path) {
     var args = Array.prototype.slice.call(arguments, 1);
-    superagent[method].apply(null, [formatUrl(path)].concat(args));
+    return superagent[method].apply(null, [formatUrl(path)].concat(args));
   };
 });
 
