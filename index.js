@@ -3,9 +3,12 @@ var app = express();
 var port = process.env.PORT || 3030;
 var apiPort = process.env.API_PORT || 3031;
 var api = require('./lib/api');
-var routes = require('./app/routes');
-var Router = require('./app/router');
-var router = new Router(routes);
+var middleware = require('./app/router/middleware');
+
+/**
+ * This initializes our routes.
+ */
+var router = require('./app/initialize');
 
 // Allow directly requiring '.jsx' files.
 require('node-jsx').install({extension: '.jsx'});
@@ -13,7 +16,7 @@ require('node-jsx').install({extension: '.jsx'});
 app.use(express.static(__dirname + '/public'));
 
 // Mount the routes defined in `./app/routes` on our server.
-app.use(router.middleware());
+app.use(middleware(router));
 
 // On the client, we want to be able to just send API requests to the
 // main web server using a relative URL, so we proxy requests to the

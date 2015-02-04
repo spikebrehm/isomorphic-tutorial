@@ -1,11 +1,9 @@
 /**
- * Entry point for client-side.
+ * Initialize our isomorphic app.
  */
 
 var Router = require('./router');
 var routes = require('./routes');
 var router = new Router(routes);
 
-window.router = router;
-
-router.start();
+module.exports = router;

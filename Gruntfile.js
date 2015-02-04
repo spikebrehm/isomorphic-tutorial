@@ -23,7 +23,7 @@ module.exports = function (grunt) {
           alias: ['jquery-browserify:jquery'],
         },
         files: {
-          'public/scripts.js': 'app/entry.js',
+          'public/scripts.js': 'app/initialize.js',
         },
       },
     },

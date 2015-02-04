@@ -11,6 +11,11 @@ function Router(routesFn) {
 
   this.directorRouter = new DirectorRouter(this.parseRoutes(routesFn));
   this.renderer = new Renderer;
+
+  if (!isServer) {
+    // Kick-off client-side initialization.
+    this.start();
+  }
 }
 
 /**
@@ -73,28 +78,6 @@ Router.prototype.getRouteHandler = function(handler) {
 Router.prototype.getComponent = function(viewPath, data) {
   var Component = React.createFactory(require(Renderer.viewsDir + '/' + viewPath + '.jsx'));
   return Component(data);
-};
-
-/*
- * Express middleware function, for mounting routes onto an Express app.
- */
-Router.prototype.middleware = function() {
-  var directorRouter = this.directorRouter;
-
-  return function middleware(req, res, next) {
-    // Attach `this.next` to route handler, for better handling of errors.
-    directorRouter.attach(function() {
-      this.next = next;
-    });
-
-    // Dispatch the request to the Director router.
-    directorRouter.dispatch(req, res, function (err) {
-      // When a 404, just forward on to next Express middleware.
-      if (err && err.status === 404) {
-        next();
-      }
-    });
-  };
 };
 
 /**
