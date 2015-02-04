@@ -3,10 +3,6 @@ Isomorphic JavaScript Tutorial
 
 This is a small sample app built to demonstrate isomorphic JavaScript concepts.
 
-I'll be using this in some upcoming workshops:
-
-* DevBeat, 12 Nov 2013
-* General Assembly, 21 Nov 2013
 
 ## Overview
 
@@ -30,9 +26,9 @@ We use [Browserify](http://browserify.org/) and [Grunt](http://gruntjs.com/) to 
 
 ## Getting it running
 
-### Install Node.js >= 0.8.x
+### Install Node.js >= 0.10.x
 
-If Node.js versino 0.8.x (preferably 0.10.x) is not already installed on your system, install it so you can run this app.
+If Node.js version 0.10.x is not already installed on your system, install it so you can run this app.
 
 #### Check if it's installed
 
@@ -44,7 +40,7 @@ The command `which node` will return a path to your installed version of Node.js
 If it is installed, make sure it's at least version 0.8.x, and preferably 0.10.x.
 
     $ node --version
-    v0.10.21
+    v0.10.33
 
 #### To install
 
