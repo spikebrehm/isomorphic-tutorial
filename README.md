@@ -107,11 +107,11 @@ We've got some branches you can check out that show how to add certain features.
 
 This branch adds the [Moment](http://momentjs.com/) date formatting library for use on the `/posts/:id` page.
 
-### Use Showdown library to add Markdown to posts
+### Use Marked library to add Markdown to posts
 
-[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/showdown)
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/markdown)
 
-This branch adds the [Showdown](https://github.com/coreyti/showdown) library to allow
+This branch adds the [Marked](https://github.com/chjj/marked) library to allow
 formatting of blog post bodies in Markdown, in just a few lines of code.
 
 ### Create a route for adding posts
