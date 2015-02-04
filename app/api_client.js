@@ -22,8 +22,12 @@ function formatUrl(path) {
     // Prepend host and port of the API server to the path.
     url = 'http://localhost:' + apiPort + path;
   } else {
-    // Prepend `/api` to relative URL, to proxy to API server.
-    url = '/api' + path;
+    if (path.substr(0, 5) === '/api/') {
+      url = path;
+    } else {
+      // Prepend `/api` to relative URL, to proxy to API server.
+      url = '/api' + path;
+    }
   }
   return url;
 }

@@ -4,7 +4,6 @@ var Handlebars = isServer ? require('handlebars') : null;
 var React = require('react');
 var viewsDir = (isServer ? __dirname : 'app') + '/views';
 var DirectorRouter = isServer ? director.http.Router : director.Router;
-var firstRender = true;
 
 // Expose `window.React` for dev tools.
 if (!isServer) window.React = React;
@@ -41,14 +40,6 @@ Router.prototype.getRouteHandler = function(handler) {
   var router = this;
 
   return function() {
-    /** If it's the first render on the client, just return; we don't want to
-     * replace the page's HTML.
-     */
-    if (!isServer && firstRender) {
-      firstRender = false;
-      return;
-    }
-
     // `routeContext` has `req` and `res` when on the server (from Director).
     var routeContext = this;
     var params = Array.prototype.slice.call(arguments);
@@ -63,6 +54,8 @@ Router.prototype.getRouteHandler = function(handler) {
         if (err) return handleErr(err);
 
         data = data || {};
+        // Add `router` property, i.e. so components can do redirects.
+        data.router = router;
         // Add `renderer` property to demonstrate which side did the rendering.
         data.renderer = isServer ? 'server' : 'client';
 
@@ -102,12 +95,8 @@ Router.prototype.handleClientRoute = function(component) {
 Router.prototype.handleServerRoute = function(component, req, res) {
   var html = React.renderToString(component);
 
-  // Any objects we want to serialize to the client on pageload.
-  var bootstrappedData = {};
-
   var locals = {
     body: html,
-    bootstrappedData: JSON.stringify(bootstrappedData),
   };
 
   this.wrapWithLayout(locals, function(err, layoutHtml) {
@@ -156,9 +145,7 @@ Router.prototype.middleware = function() {
 /**
  * Client-side handler to start router.
  */
-Router.prototype.start = function(bootstrappedData) {
-  this.bootstrappedData = bootstrappedData;
-
+Router.prototype.start = function() {
   /**
    * Tell Director to use HTML5 History API (pushState).
    */

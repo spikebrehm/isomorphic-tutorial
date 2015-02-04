@@ -8,4 +8,4 @@ var router = new Router(routes);
 
 window.router = router;
 
-router.start(window.bootstrappedData);
+router.start();
