@@ -7,11 +7,11 @@ module.exports = function (grunt) {
       main: {
         options: {
           debug: true,
-          transform: ['hbsfy'],
+          transform: ['reactify'],
           aliasMappings: [
             {
               cwd: 'app/views',
-              src: ['**/*'],
+              src: ['**/*.jsx'],
               dest: 'app/views',
               rename: function(cwd, src) {
                 // Little hack to ensure that file extension is preserved.

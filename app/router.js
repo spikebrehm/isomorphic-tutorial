@@ -1,12 +1,13 @@
 var director = require('director');
 var isServer = typeof window === 'undefined';
-var Handlebars = isServer ? require('handlebars') : require('hbsfy/runtime');
+var Handlebars = isServer ? require('handlebars') : null;
+var React = require('react');
 var viewsDir = (isServer ? __dirname : 'app') + '/views';
 var DirectorRouter = isServer ? director.http.Router : director.Router;
 var firstRender = true;
 
-// Register Handlebars Helpers
-require('./helpers')(Handlebars).register();
+// Expose `window.React` for dev tools.
+if (!isServer) window.React = React;
 
 module.exports = Router;
 
@@ -97,8 +98,8 @@ Router.prototype.handleErr = function(err) {
 
 Router.prototype.renderView = function(viewPath, data, callback) {
   try {
-    var template = require(viewsDir + '/' + viewPath + '.hbs');
-    var html = template(data);
+    var Component = React.createFactory(require(viewsDir + '/' + viewPath + '.jsx'));
+    var html = React.renderToString(Component(data));
     callback(null, html);
   } catch (err) {
     callback(err);

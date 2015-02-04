@@ -7,6 +7,9 @@ var routes = require('./app/routes');
 var Router = require('./app/router');
 var router = new Router(routes);
 
+// Allow directly requiring '.jsx' files.
+require('node-jsx').install({extension: '.jsx'});
+
 app.use(express.static(__dirname + '/public'));
 
 // Mount the routes defined in `./app/routes` on our server.

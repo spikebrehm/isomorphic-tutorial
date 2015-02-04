@@ -26,6 +26,8 @@
     "hbsfy": "^2.2.1",
     "http-proxy": "~0.10.3",
     "jquery-browserify": "~1.8.1",
+    "node-jsx": "^0.12.4",
+    "react": "^0.12.2",
     "superagent": "^0.21.0",
     "underscore": "^1.7.0"
   },
@@ -38,6 +40,7 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-node-inspector": "~0.1.1",
     "grunt-nodemon": "~0.1.1",
-    "load-grunt-tasks": "^3.1.0"
+    "load-grunt-tasks": "^3.1.0",
+    "reactify": "^0.15.2"
   }
 }
