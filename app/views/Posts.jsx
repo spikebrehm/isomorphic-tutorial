@@ -6,6 +6,8 @@ var Posts = React.createClass({
     return (
       <div>
         <h1>Posts</h1>
+        <a className="btn btn-default" href="/posts/new">Create new post</a>
+        <br /><br />
         <ul>
         {this.props.posts.map(function(post, index) {
           return <li key={index}><a href={'/posts/' + post.id}>{post.title}</a></li>;
