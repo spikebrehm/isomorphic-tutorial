@@ -1,12 +1,8 @@
 var director = require('director');
-var isServer = typeof window === 'undefined';
-var Handlebars = isServer ? require('handlebars') : null;
 var React = require('react');
-var viewsDir = (isServer ? __dirname : 'app') + '/views';
+var isServer = !process.browser;
 var DirectorRouter = isServer ? director.http.Router : director.Router;
-
-// Expose `window.React` for dev tools.
-if (!isServer) window.React = React;
+var Renderer = require('./renderer');
 
 module.exports = Router;
 
@@ -14,6 +10,7 @@ function Router(routesFn) {
   if (routesFn == null) throw new Error("Must provide routes.");
 
   this.directorRouter = new DirectorRouter(this.parseRoutes(routesFn));
+  this.renderer = new Renderer;
 }
 
 /**
@@ -43,7 +40,7 @@ Router.prototype.getRouteHandler = function(handler) {
     // `routeContext` has `req` and `res` when on the server (from Director).
     var routeContext = this;
     var params = Array.prototype.slice.call(arguments);
-    var handleErr = router.handleErr.bind(routeContext);
+    var handleErr = router.renderer.handleErr.bind(routeContext);
     var handlerContext = {
       req: this.req,
       res: this.res,
@@ -61,11 +58,7 @@ Router.prototype.getRouteHandler = function(handler) {
 
         var component = router.getComponent(viewPath, data);
 
-        if (isServer) {
-          router.handleServerRoute(component, routeContext.req, routeContext.res);
-        } else {
-          router.handleClientRoute(component);
-        }
+        router.renderer.render(component, routeContext.req, routeContext.res);
       }));
     }
 
@@ -77,47 +70,9 @@ Router.prototype.getRouteHandler = function(handler) {
   };
 };
 
-Router.prototype.handleErr = function(err) {
-  console.error(err.message + err.stack);
-
-  // `this.next` is defined on the server.
-  if (this.next) {
-    this.next(err);
-  } else {
-    alert(err.message);
-  }
-};
-
-Router.prototype.handleClientRoute = function(component) {
-  React.render(component, document.getElementById('view-container'));
-};
-
-Router.prototype.handleServerRoute = function(component, req, res) {
-  var html = React.renderToString(component);
-
-  var locals = {
-    body: html,
-  };
-
-  this.wrapWithLayout(locals, function(err, layoutHtml) {
-    if (err) return res.status(500).type('text').send(err.message);
-    res.send(layoutHtml);
-  });
-};
-
 Router.prototype.getComponent = function(viewPath, data) {
-  var Component = React.createFactory(require(viewsDir + '/' + viewPath + '.jsx'));
+  var Component = React.createFactory(require(Renderer.viewsDir + '/' + viewPath + '.jsx'));
   return Component(data);
-};
-
-Router.prototype.wrapWithLayout = function(locals, callback) {
-  try {
-    var layout = require(viewsDir + '/layout');
-    var layoutHtml = layout(locals);
-    callback(null, layoutHtml);
-  } catch (err) {
-    callback(err);
-  }
 };
 
 /*

@@ -3,7 +3,7 @@
  * the API the same way on client & server.
  */
 var superagent = require('superagent');
-var isServer = typeof window === 'undefined';
+var isServer = !process.browser;
 var apiPort = process.env.API_PORT || 3031;
 
 /**

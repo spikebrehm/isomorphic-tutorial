@@ -41,5 +41,8 @@
     "grunt-nodemon": "~0.1.1",
     "load-grunt-tasks": "^3.1.0",
     "reactify": "^0.15.2"
+  },
+  "browser": {
+    "./app/router/renderer/index.js": "./app/router/renderer/client.js"
   }
 }
