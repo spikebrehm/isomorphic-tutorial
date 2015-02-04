@@ -116,7 +116,7 @@ formatting of blog post bodies in Markdown, in just a few lines of code.
 
 ### Create a route for adding posts
 
-[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/posts-create)
+[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/posts-new)
 
 Create a page with a form at `/posts/new`, which POSTs to the `/api/posts.json` endpoint.
 
