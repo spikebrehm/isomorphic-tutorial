@@ -6,23 +6,34 @@ This is a small sample app built to demonstrate isomorphic JavaScript concepts.
 
 ## Overview
 
-Here we've built the minimum-viable example of an isomorphic JavaScript app: an app that can run on both client and server. Check out my [blog post](http://venturebeat.com/2013/11/08/the-future-of-web-apps-is-ready-isomorphic-javascript/) on isomorphic JavaScript for some background.
+Here we've built the minimum-viable example of an isomorphic JavaScript app: an
+app that can run on both client and server. Check out my
+[blog post](http://nerds.airbnb.com/isomorphic-javascript-future-web-apps/)
+on isomorphic JavaScript for some background.
 
-This is a simple Express "blog" app that lists blog posts. Each page is fully rendered on the server, however upon subsequent navigation, we use the HTML5 History API, aka `pushState`, to fetch the data for that page from the API and render the HTML client-side using Handlebars.
+This is a simple Express "blog" app that lists blog posts. Each page is fully
+rendered on the server, however upon subsequent navigation, we use the HTML5
+History API, aka `pushState`, to fetch the data for that page from the API and
+render the HTML client-side using React.
 
 ## Under the hood
 
-We combine a few modules together to build an isomorphic JavaScript app. Each of these modules was built to support both the client and the server, and by creating some small shims around them, we can abstract out the differences to create the same API for both client and server.
+We combine a few modules together to build an isomorphic JavaScript app. Each
+of these modules was built to support both the client and the server, and by
+creating some small shims around them, we can abstract out the differences to
+create the same API for both client and server.
 
 We use the following modules on both client and server:
 
-* [Handlebars](https://github.com/wycats/handlebars.js) (templating)
+* [React](https://github.com/facebook/react) (UI components)
 * [Director](https://github.com/flatiron/director) (routing)
 * [Superagent](https://github.com/visionmedia/superagent) (HTTP requests)
 
 On top of a basic [Express](https://github.com/visionmedia/express) app.
 
-We use [Browserify](http://browserify.org/) and [Grunt](http://gruntjs.com/) to package our server-side CommonJS modules in a way that allows us to use them in the client-side.
+We use [Browserify](http://browserify.org/) and [Grunt](http://gruntjs.com/) to
+package our server-side CommonJS modules in a way that allows us to use them in
+the client-side.
 
 ## Getting it running
 
@@ -95,13 +106,6 @@ We've got some branches you can check out that show how to add certain features.
 [compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/moment)
 
 This branch adds the [Moment](http://momentjs.com/) date formatting library for use on the `/posts/:id` page.
-
-### Swapping out Handlebars.js for React.js
-
-[compare to master](https://github.com/spikebrehm/isomorphic-tutorial/compare/react)
-
-[React.js](https://facebook.github.io/react/) is an awesome UI library from Facebook. This branch shows
-how to use it instead of Handlebars.js for rendering views on client and server.
 
 ### Use Showdown library to add Markdown to posts
 
