@@ -1,12 +1,11 @@
-var express = require('express')
-  , app = express()
-  , port = process.env.PORT || 3030
-  , apiPort = process.env.API_PORT || 3031
-  , api = require('./lib/api')
-  , routes = require('./app/routes')
-  , Router = require('./app/router')
-  , router = new Router(routes)
-;
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 3030;
+var apiPort = process.env.API_PORT || 3031;
+var api = require('./lib/api');
+var routes = require('./app/routes');
+var Router = require('./app/router');
+var router = new Router(routes);
 
 app.use(express.static(__dirname + '/public'));
 

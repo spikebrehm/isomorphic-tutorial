@@ -1,10 +1,9 @@
-var director = require('director')
-  , isServer = typeof window === 'undefined'
-  , Handlebars = isServer ? require('handlebars') : require('hbsfy/runtime')
-  , viewsDir = (isServer ? __dirname : 'app') + '/views'
-  , DirectorRouter = isServer ? director.http.Router : director.Router
-  , firstRender = true
-;
+var director = require('director');
+var isServer = typeof window === 'undefined';
+var Handlebars = isServer ? require('handlebars') : require('hbsfy/runtime');
+var viewsDir = (isServer ? __dirname : 'app') + '/views';
+var DirectorRouter = isServer ? director.http.Router : director.Router;
+var firstRender = true;
 
 // Register Handlebars Helpers
 require('./helpers')(Handlebars).register();
@@ -51,13 +50,16 @@ Router.prototype.getRouteHandler = function(handler) {
     }
 
     // `routeContext` has `req` and `res` when on the server (from Director).
-    var routeContext = this
-      , params = Array.prototype.slice.call(arguments)
-      , handleErr = router.handleErr.bind(routeContext)
-    ;
+    var routeContext = this;
+    var params = Array.prototype.slice.call(arguments);
+    var handleErr = router.handleErr.bind(routeContext);
+    var handlerContext = {
+      req: this.req,
+      res: this.res,
+    };
 
     function handleRoute() {
-      handler.apply(null, params.concat(function routeHandler(err, viewPath, data) {
+      handler.apply(handlerContext, params.concat(function routeHandler(err, viewPath, data) {
         if (err) return handleErr(err);
 
         data = data || {};
@@ -96,9 +98,8 @@ Router.prototype.handleErr = function(err) {
 
 Router.prototype.renderView = function(viewPath, data, callback) {
   try {
-    var template = require(viewsDir + '/' + viewPath + '.hbs')
-      , html = template(data)
-    ;
+    var template = require(viewsDir + '/' + viewPath + '.hbs');
+    var html = template(data);
     callback(null, html);
   } catch (err) {
     callback(err);
@@ -107,9 +108,8 @@ Router.prototype.renderView = function(viewPath, data, callback) {
 
 Router.prototype.wrapWithLayout = function(locals, callback) {
   try {
-    var layout = require(viewsDir + '/layout')
-      , layoutHtml = layout(locals)
-    ;
+    var layout = require(viewsDir + '/layout');
+    var layoutHtml = layout(locals);
     callback(null, layoutHtml);
   } catch (err) {
     callback(err);
@@ -146,6 +146,7 @@ Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
   };
 
   this.wrapWithLayout(locals, function(err, layoutHtml) {
+    if (err) return res.status(500).type('text').send(err.message);
     res.send(layoutHtml);
   });
 };
@@ -190,9 +191,8 @@ Router.prototype.start = function(bootstrappedData) {
    * pushState.
    */
   document.addEventListener('click', function(e) {
-    var el = e.target
-      , dataset = el && el.dataset
-    ;
+    var el = e.target;
+    var dataset = el && el.dataset;
     if (el && el.nodeName === 'A' && (
         dataset.passThru == null || dataset.passThru === 'false'
       )) {

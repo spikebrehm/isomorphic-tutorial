@@ -4,6 +4,9 @@
   "description": "Tutorial app to demonstrate isomorphic JavaScript concepts.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "grunt server",
+    "debug": "grunt server:debug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,23 +19,25 @@
     "url": "https://github.com/spikebrehm/isomorphic-tutorial/issues"
   },
   "dependencies": {
-    "superagent": "~0.15.7",
-    "express": "~3.4.3",
-    "director": "~1.2.0",
-    "handlebars": "~1.0.12",
-    "hbsfy": "~1.0.0",
-    "underscore": "~1.5.2",
+    "body-parser": "^1.11.0",
+    "director": "^1.2.7",
+    "express": "^4.11.2",
+    "handlebars": "^2.0.0",
+    "hbsfy": "^2.2.1",
     "http-proxy": "~0.10.3",
-    "jquery-browserify": "~1.8.1"
+    "jquery-browserify": "~1.8.1",
+    "superagent": "^0.21.0",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
     "browserify": "~2.35.0",
+    "grunt": "~0.4.1",
     "grunt-browserify": "~1.2.9",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-nodemon": "~0.1.1",
     "grunt-concurrent": "~0.4.1",
     "grunt-contrib-stylus": "~0.10.0",
-    "grunt-node-inspector": "~0.1.1"
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-node-inspector": "~0.1.1",
+    "grunt-nodemon": "~0.1.1",
+    "load-grunt-tasks": "^3.1.0"
   }
 }
