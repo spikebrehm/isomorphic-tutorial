@@ -1,4 +1,5 @@
 var React = require('react');
+var Renderer = require('./Renderer.jsx');
 
 var Index = React.createClass({
   render: function() {
@@ -6,6 +7,7 @@ var Index = React.createClass({
       <div>
         <h1>Home</h1>
         <p>View <a href="/posts">posts</a>.</p>
+        <Renderer renderer={this.props.renderer} />
       </div>
     );
   }

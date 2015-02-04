@@ -1,4 +1,5 @@
 var React = require('react');
+var Renderer = require('./Renderer.jsx');
 
 var Posts = React.createClass({
   render: function() {
@@ -10,6 +11,7 @@ var Posts = React.createClass({
           return <li key={index}><a href={'/posts/' + post.id}>{post.title}</a></li>;
         })}
         </ul>
+        <Renderer renderer={this.props.renderer} />
       </div>
     );
   }
