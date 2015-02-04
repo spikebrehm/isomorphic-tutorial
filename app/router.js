@@ -129,6 +129,7 @@ Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
   };
 
   this.wrapWithLayout(locals, function(err, layoutHtml) {
+    if (err) return res.status(500).type('text').send(err.message);
     res.send(layoutHtml);
   });
 };
