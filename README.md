@@ -3,10 +3,6 @@ Isomorphic JavaScript Tutorial
 
 This is a small sample app built to demonstrate isomorphic JavaScript concepts.
 
-I'll be using this in some upcoming workshops:
-
-* DevBeat, 12 Nov 2013
-* General Assembly, 21 Nov 2013
 
 ## Overview
 
