@@ -63,17 +63,16 @@ Router.prototype.getRouteHandler = function(handler) {
         if (err) return handleErr(err);
 
         data = data || {};
+        // Add `renderer` property to demonstrate which side did the rendering.
         data.renderer = isServer ? 'server' : 'client';
 
-        router.renderView(viewPath, data, function(err, html) {
-          if (err) return handleErr(err);
+        var component = router.getComponent(viewPath, data);
 
-          if (isServer) {
-            router.handleServerRoute(viewPath, html, routeContext.req, routeContext.res);
-          } else {
-            router.handleClientRoute(viewPath, html);
-          }
-        });
+        if (isServer) {
+          router.handleServerRoute(component, routeContext.req, routeContext.res);
+        } else {
+          router.handleClientRoute(component);
+        }
       }));
     }
 
@@ -96,31 +95,13 @@ Router.prototype.handleErr = function(err) {
   }
 };
 
-Router.prototype.renderView = function(viewPath, data, callback) {
-  try {
-    var Component = React.createFactory(require(viewsDir + '/' + viewPath + '.jsx'));
-    var html = React.renderToString(Component(data));
-    callback(null, html);
-  } catch (err) {
-    callback(err);
-  }
+Router.prototype.handleClientRoute = function(component) {
+  React.render(component, document.getElementById('view-container'));
 };
 
-Router.prototype.wrapWithLayout = function(locals, callback) {
-  try {
-    var layout = require(viewsDir + '/layout');
-    var layoutHtml = layout(locals);
-    callback(null, layoutHtml);
-  } catch (err) {
-    callback(err);
-  }
-};
+Router.prototype.handleServerRoute = function(component, req, res) {
+  var html = React.renderToString(component);
 
-Router.prototype.handleClientRoute = function(viewPath, html) {
-  document.getElementById('view-container').innerHTML = html;
-};
-
-Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
   // Any objects we want to serialize to the client on pageload.
   var bootstrappedData = {};
 
@@ -133,6 +114,21 @@ Router.prototype.handleServerRoute = function(viewPath, html, req, res) {
     if (err) return res.status(500).type('text').send(err.message);
     res.send(layoutHtml);
   });
+};
+
+Router.prototype.getComponent = function(viewPath, data) {
+  var Component = React.createFactory(require(viewsDir + '/' + viewPath + '.jsx'));
+  return Component(data);
+};
+
+Router.prototype.wrapWithLayout = function(locals, callback) {
+  try {
+    var layout = require(viewsDir + '/layout');
+    var layoutHtml = layout(locals);
+    callback(null, layoutHtml);
+  } catch (err) {
+    callback(err);
+  }
 };
 
 /*
