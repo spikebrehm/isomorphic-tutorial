@@ -8,7 +8,7 @@ var Posts = React.createClass({
         <h1>Posts</h1>
         <ul>
         {this.props.posts.map(function(post, index) {
-          return <li key={index}><a href={'/posts/' + post.id}>{post.title}</a></li>;
+          return <li key={index}><a href={'/post/' + post.id}>{post.title}</a></li>;
         })}
         </ul>
         <Renderer renderer={this.props.renderer} />

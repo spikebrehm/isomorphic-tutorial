@@ -18,7 +18,7 @@ module.exports = function(match) {
     });
   });
 
-  match('/posts/:id', function(id, callback) {
+  match('/post/:id', function(id, callback) {
     console.log('post: ' + id);
 
     apiClient.get('/posts/' + id + '.json', function(err, res) {
