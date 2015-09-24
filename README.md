@@ -39,7 +39,7 @@ the client-side.
 
 ### Install Node.js >= 0.10.x
 
-If Node.js version 0.10.x is not already installed on your system, install it so you can run this app.
+If Node.js version >= 0.10.x is not already installed on your system, install it so you can run this app.
 
 #### Check if it's installed
 
@@ -48,7 +48,7 @@ The command `which node` will return a path to your installed version of Node.js
     $ which node
     /usr/local/bin/node
 
-If it is installed, make sure it's at least version 0.8.x, and preferably 0.10.x.
+If it is installed, make sure it's >= 0.10.x.
 
     $ node --version
     v0.10.33
