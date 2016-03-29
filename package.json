@@ -42,6 +42,10 @@
     "load-grunt-tasks": "^3.1.0",
     "reactify": "^0.15.2"
   },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=0.10.x <=0.12.x"
+  },
   "browser": {
     "./app/router/renderer/index.js": "./app/router/renderer/client.js"
   }
