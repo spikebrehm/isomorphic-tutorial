@@ -37,7 +37,7 @@ the client-side.
 
 ## Getting it running
 
-### Install Node.js >= 0.10.x
+### Install Node.js >= 0.10.x <=0.12.x
 
 If Node.js version >= 0.10.x is not already installed on your system, install it so you can run this app.
 
